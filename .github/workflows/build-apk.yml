@@ -31,16 +31,19 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-          cache: 'gradle'
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-
-      - name: Set up Node.js
+      - name: Set up Node.js 22
         uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: 'npm'
+
+      - name: Accept Android SDK Licenses
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses || yes | sdkmanager --licenses || true
+
+      - name: Set up Gradle Cache
+        uses: gradle/actions/setup-gradle@v4
 
       - name: Install Node Dependencies
         run: npm install
@@ -55,10 +58,9 @@ jobs:
           if [ ! -d "android" ]; then
             echo "Initializing Android platform with Capacitor..."
             npx cap add android
-          else
-            echo "Syncing web assets to Android platform..."
-            npx cap sync android
           fi
+          echo "Syncing web assets to Android platform..."
+          npx cap sync android
 
       - name: Grant Execute Permission to Gradle Wrapper
         run: chmod +x android/gradlew
@@ -81,6 +83,7 @@ jobs:
         with:
           name: JCBilling-Android-Debug-APK
           path: android/app/build/outputs/apk/debug/*.apk
+          if-no-files-found: warn
           retention-days: 30
 
       - name: Upload Release APK Artifact
@@ -89,4 +92,5 @@ jobs:
         with:
           name: JCBilling-Android-Release-APK
           path: android/app/build/outputs/apk/release/*.apk
+          if-no-files-found: warn
           retention-days: 30

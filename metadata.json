@@ -1,0 +1,10 @@
+{
+  "name": "Remix JCBillingV3.7",
+  "description": "Major improvement to  v 3.5 , it is saving for future purpose as a restore point.\nCloud Backup Sync fix, Delete fix, Ui Imporverd fro import functio n, made friendly for mobile user.",
+  "requestFramePermissions": [
+    "camera"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
